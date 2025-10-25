@@ -176,8 +176,14 @@ async function main() {
   const buses = [];
   for (const operator of operators) {
     for (let i = 1; i <= 3; i++) {
-      const bus = await prisma.bus.create({
-        data: {
+      const bus = await prisma.bus.upsert({
+        where: {
+          busNumber: `${operator.name.substring(0, 3).toUpperCase()}-${i
+            .toString()
+            .padStart(3, "0")}`,
+        },
+        update: {},
+        create: {
           operatorId: operator.id,
           busNumber: `${operator.name.substring(0, 3).toUpperCase()}-${i
             .toString()
@@ -194,7 +200,7 @@ async function main() {
       });
       buses.push(bus);
 
-      // Create seat layout for each bus
+      // Create seat layout for each bus (only if not exists)
       const seatLayout = [];
       for (let row = 1; row <= 10; row++) {
         for (const col of ["A", "B", "C", "D"]) {
@@ -206,8 +212,10 @@ async function main() {
         }
       }
 
+      // Use createMany with skipDuplicates to avoid conflicts
       await prisma.seatLayout.createMany({
         data: seatLayout,
+        skipDuplicates: true,
       });
     }
   }
@@ -252,8 +260,16 @@ async function main() {
         const baseSpeed = Math.random() * 30 + 50; // 50-80 km/h
         const duration = Math.round((distance / baseSpeed) * 60); // Convert to minutes
 
-        const route = await prisma.route.create({
-          data: {
+        const route = await prisma.route.upsert({
+          where: {
+            operatorId_originId_destinationId: {
+              operatorId: operator.id,
+              originId: origin.id,
+              destinationId: destination.id,
+            },
+          },
+          update: {},
+          create: {
             operatorId: operator.id,
             originId: origin.id,
             destinationId: destination.id,
@@ -364,8 +380,16 @@ async function main() {
           (Math.random() * 300 + 200) * basePriceMultiplier
         ); // 200-500 with multipliers
 
-        const schedule = await prisma.schedule.create({
-          data: {
+        const schedule = await prisma.schedule.upsert({
+          where: {
+            routeId_busId_departureTime: {
+              routeId: route.id,
+              busId: bus.id,
+              departureTime,
+            },
+          },
+          update: {},
+          create: {
             routeId: route.id,
             busId: bus.id,
             operatorId: route.operatorId,
@@ -375,20 +399,35 @@ async function main() {
           },
         });
 
-        // Create pricing tiers for this schedule
-        await prisma.pricingTier.createMany({
-          data: [
-            {
+        // Create pricing tiers for this schedule (using upsert)
+        await prisma.pricingTier.upsert({
+          where: {
+            scheduleId_seatType: {
               scheduleId: schedule.id,
               seatType: SeatType.REGULAR,
-              price: schedule.basePrice,
             },
-            {
+          },
+          update: {},
+          create: {
+            scheduleId: schedule.id,
+            seatType: SeatType.REGULAR,
+            price: schedule.basePrice,
+          },
+        });
+
+        await prisma.pricingTier.upsert({
+          where: {
+            scheduleId_seatType: {
               scheduleId: schedule.id,
               seatType: SeatType.PREMIUM,
-              price: Math.floor(schedule.basePrice * 1.5),
             },
-          ],
+          },
+          update: {},
+          create: {
+            scheduleId: schedule.id,
+            seatType: SeatType.PREMIUM,
+            price: Math.floor(schedule.basePrice * 1.5),
+          },
         });
 
         schedules.push(schedule);

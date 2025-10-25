@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Test - Mobile Experience</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .qr-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            background: white;
+            border: 3px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #666;
+            border-radius: 10px;
+        }
+        .ticket-info {
+            color: #333;
+            text-align: left;
+        }
+        .url-display {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            color: #666;
+            word-break: break-all;
+            margin: 10px 0;
+        }
+        .test-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .test-button:hover {
+            background: #45a049;
+        }
+        .instructions {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎟️ QR Code Mobile Experience Test</h1>
+        <p>Test the mobile QR code scanning experience with a sample ticket</p>
+        
+        <div class="qr-section">
+            <h3 style="color: #333; margin-top: 0;">Sample Bus Ticket QR Code</h3>
+            
+            <div class="ticket-info">
+                <strong>📋 PNR:</strong> BT17590774255497RGP<br>
+                <strong>👤 Passenger:</strong> Mahamud Hanif<br>
+                <strong>🚌 Route:</strong> Dhaka → Chittagong<br>
+                <strong>📅 Departure:</strong> Sep 30, 2025 at 05:16<br>
+                <strong>💺 Seat:</strong> 4C
+            </div>
+            
+            <div class="qr-code">
+                QR Code would appear here
+                <br><small>(Simulated for testing)</small>
+            </div>
+            
+            <div class="url-display">
+                http://localhost:3001/api/qr/download?pnr=BT17590774255497RGP&action=mobile
+            </div>
+            
+            <button class="test-button" onclick="testMobileView()">
+                📱 Test Mobile View
+            </button>
+            
+            <button class="test-button" onclick="testQRScanner()">
+                📷 Test QR Scanner
+            </button>
+        </div>
+        
+        <div class="instructions">
+            <h3>📱 How to Test Mobile Experience:</h3>
+            <ol style="text-align: left;">
+                <li><strong>Mobile View:</strong> Click "Test Mobile View" to see the beautiful landing page</li>
+                <li><strong>QR Scanner:</strong> Click "Test QR Scanner" to test the scanning interface</li>
+                <li><strong>Real QR Code:</strong> Generate a PDF ticket and scan with your phone camera</li>
+                <li><strong>Mobile Browser:</strong> Open this on mobile device for authentic experience</li>
+            </ol>
+            
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-top: 15px;">
+                <strong>✅ Improvements Made:</strong><br>
+                • Mobile-optimized QR landing page<br>
+                • Beautiful ticket preview design<br>
+                • Animated success indicators<br>
+                • One-tap actions (View, Download, Share)<br>
+                • Responsive mobile layout<br>
+                • Better error handling
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function testMobileView() {
+            // Test the mobile QR landing page
+            window.open('/qr/BT17590774255497RGP', '_blank');
+        }
+        
+        function testQRScanner() {
+            // Test the QR scanner page
+            window.open('/qr-scanner', '_blank');
+        }
+        
+        // Display actual QR data for reference
+        const qrData = {
+            "type": "bus-ticket",
+            "pnr": "BT17590774255497RGP",
+            "passenger": "Mahamud Hanif",
+            "route": "Dhaka-Chittagong",
+            "departure": "2025-09-30T05:16:00.000Z",
+            "seats": "4C",
+            "url": "http://localhost:3001/api/qr/download?pnr=BT17590774255497RGP&action=mobile",
+            "mobile": {"optimized": true}
+        };
+        
+        console.log('📱 QR Data Structure:', qrData);
+        console.log('📏 QR Data Size:', JSON.stringify(qrData).length, 'characters');
+    </script>
+</body>
+</html>

@@ -200,12 +200,12 @@ function SignInForm() {
               Sign in with Google
             </Button>
 
-            <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg p-3 sm:p-4">
+            <div className="bg-blue-50 dark:bg-blue-900/70 border border-blue-200 dark:border-blue-700 rounded-lg p-3 sm:p-4">
               <div className="text-xs sm:text-sm">
-                <div className="font-medium text-blue-800 dark:text-blue-300 mb-2">
+                <div className="font-medium text-black dark:text-white mb-2">
                   Demo Account:
                 </div>
-                <div className="text-blue-700 dark:text-blue-400 space-y-1">
+                <div className="text-black dark:text-white space-y-1">
                   <div>Email: admin@busticketing.com</div>
                   <div>Password: admin123</div>
                 </div>

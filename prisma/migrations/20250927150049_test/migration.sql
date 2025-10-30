@@ -199,7 +199,7 @@ CREATE TABLE "public"."Payment" (
     "id" TEXT NOT NULL,
     "bookingId" TEXT NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
-    "currency" TEXT NOT NULL DEFAULT 'USD',
+    "currency" TEXT NOT NULL DEFAULT 'BDT',
     "paymentMethod" TEXT NOT NULL,
     "transactionId" TEXT,
     "status" "public"."PaymentStatus" NOT NULL DEFAULT 'PENDING',

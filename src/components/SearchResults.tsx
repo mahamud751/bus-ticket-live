@@ -231,7 +231,7 @@ export default function SearchResults({
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold text-blue-600">
-                      ${route.pricing.regular}
+                      ৳{route.pricing.regular}
                     </div>
                     <div className="text-sm text-gray-600">per seat</div>
                   </div>

@@ -152,7 +152,7 @@ export async function GET(request: NextRequest) {
           pricing: {
             regular: regularPrice,
             premium: premiumPrice,
-            currency: "USD",
+            currency: "BDT",
           },
         };
       })

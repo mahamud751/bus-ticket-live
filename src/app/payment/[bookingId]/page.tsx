@@ -306,7 +306,7 @@ function PaymentForm({ booking }: { booking: BookingData }) {
                       </div>
                     </div>
                   </div>
-                  <div className="font-semibold">${seat.price}</div>
+                  <div className="font-semibold">৳{seat.price}</div>
                 </div>
               ))}
 
@@ -314,7 +314,7 @@ function PaymentForm({ booking }: { booking: BookingData }) {
                 <div className="flex justify-between items-center text-lg font-bold">
                   <span>Total Amount:</span>
                   <span className="text-green-600">
-                    ${booking.booking.totalAmount}
+                    ৳{booking.booking.totalAmount}
                   </span>
                 </div>
               </div>
@@ -419,7 +419,7 @@ function PaymentForm({ booking }: { booking: BookingData }) {
                 ) : (
                   <>
                     <CheckCircle className="h-5 w-5 mr-2" />
-                    {isMockPayment ? "Simulate Payment" : "Pay"} $
+                    {isMockPayment ? "Simulate Payment" : "Pay"} ৳
                     {booking.booking.totalAmount}
                   </>
                 )}

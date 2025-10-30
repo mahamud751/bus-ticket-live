@@ -709,7 +709,7 @@ export default function MyBookingsPage() {
                               Amount:
                             </span>
                             <div className="text-lg font-bold text-green-600 dark:text-green-400">
-                              ${booking.totalAmount || 0}
+                              ৳{booking.totalAmount || 0}
                             </div>
                           </div>
                           <div className="text-xs text-muted-foreground">

@@ -31,8 +31,8 @@ export const verifyWebhookSignature = (
 };
 
 // Currency configuration
-export const CURRENCY = "usd";
-export const CURRENCY_SYMBOL = "$";
+export const CURRENCY = "bdt";
+export const CURRENCY_SYMBOL = "৳";
 
 // Convert amount to Stripe format (cents)
 export const toStripeAmount = (amount: number): number => {

@@ -21,10 +21,7 @@ export function formatTime(date: Date): string {
 }
 
 export function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(amount);
+  return `৳${amount.toFixed(2)}`;
 }
 
 export function generatePNR(): string {

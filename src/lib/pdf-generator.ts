@@ -141,7 +141,7 @@ export class TicketPDFGenerator {
 
     bookingData.seats.forEach((seat) => {
       doc.text(
-        `Seat ${seat.seatNumber} (${seat.seatType}): $${seat.price}`,
+        `Seat ${seat.seatNumber} (${seat.seatType}): ৳${seat.price}`,
         20,
         yPos
       );
@@ -155,7 +155,7 @@ export class TicketPDFGenerator {
 
     doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
-    doc.text(`Total Amount: $${bookingData.totalAmount}`, 20, yPos + 5);
+    doc.text(`Total Amount: ৳${bookingData.totalAmount}`, 20, yPos + 5);
 
     // QR Code with mobile-optimized data structure
     const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://busticketing.com';

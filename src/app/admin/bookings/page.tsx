@@ -398,7 +398,7 @@ export default function AdminBookingsPage() {
                             {booking.status}
                           </Badge>
                         </TableCell>
-                        <TableCell>${booking.totalAmount.toFixed(2)}</TableCell>
+                        <TableCell>৳{booking.totalAmount.toFixed(2)}</TableCell>
                         <TableCell>
                           <Button
                             onClick={() => openBookingModal(booking)}
@@ -482,7 +482,7 @@ export default function AdminBookingsPage() {
                       >
                         <span>Seat {seat.seat.seatNumber}</span>
                         <span className="font-medium">
-                          ${seat.price.toFixed(2)}
+                          ৳{seat.price.toFixed(2)}
                         </span>
                       </div>
                     ))}

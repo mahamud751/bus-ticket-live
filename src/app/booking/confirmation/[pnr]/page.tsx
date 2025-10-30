@@ -594,7 +594,7 @@ export default function BookingConfirmationPage() {
                           </div>
                         </div>
                       </div>
-                      <div className="font-semibold">${seatBooking.price}</div>
+                      <div className="font-semibold">৳{seatBooking.price}</div>
                     </div>
                   ))}
 
@@ -602,7 +602,7 @@ export default function BookingConfirmationPage() {
                     <div className="flex justify-between items-center text-lg font-bold">
                       <span>Total Paid:</span>
                       <span className="text-green-600">
-                        ${booking.totalAmount}
+                        ৳{booking.totalAmount}
                       </span>
                     </div>
                   </div>
@@ -659,7 +659,7 @@ export default function BookingConfirmationPage() {
                     className="flex justify-between items-center"
                   >
                     <div>
-                      <div className="font-semibold">${payment.amount}</div>
+                      <div className="font-semibold">৳{payment.amount}</div>
                       <div className="text-sm text-gray-600">
                         Transaction ID: {payment.transactionId}
                       </div>

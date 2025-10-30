@@ -49,7 +49,7 @@ export async function sendBookingConfirmationEmail(
       : `• ${bookingData.passengerName}`;
 
     const seatsList = bookingData.seats
-      .map((s) => `• Seat ${s.seatNumber} (${s.seatType}) - $${s.price}`)
+      .map((s) => `• Seat ${s.seatNumber} (${s.seatType}) - ৳${s.price}`)
       .join("\n");
 
     const emailHtml = `
@@ -119,7 +119,7 @@ export async function sendBookingConfirmationEmail(
               <pre style="font-family: Arial, sans-serif; margin: 0;">${seatsList}</pre>
               <div class="detail-row" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e5e7eb;">
                 <span class="detail-label">Total Amount:</span>
-                <span style="font-size: 18px; font-weight: bold; color: #059669;">$${
+                <span style="font-size: 18px; font-weight: bold; color: #059669;">৳${
                   bookingData.totalAmount
                 }</span>
               </div>

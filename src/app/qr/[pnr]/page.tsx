@@ -323,7 +323,7 @@ export default function QRMobilePage() {
                     Total Amount
                   </div>
                   <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-                    ${ticketData.totalAmount}
+                    ৳{ticketData.totalAmount}
                   </div>
                 </div>
               </CardContent>

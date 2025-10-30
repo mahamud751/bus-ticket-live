@@ -132,7 +132,7 @@ ${booking.schedule.route.origin} → ${booking.schedule.route.destination}
 Departure: ${new Date(booking.schedule.departureTime).toLocaleString()}
 Passenger: ${booking.passengerInfo.name}
 Seats: ${booking.seats.map((s) => s.seatNumber).join(", ")}
-Amount: $${booking.totalAmount}
+Amount: ৳${booking.totalAmount}
 Status: ${booking.status}
     `;
 
@@ -305,7 +305,7 @@ Status: ${booking.status}
                             {booking.seats.map((s) => s.seatNumber).join(", ")}
                           </div>
                           <div className="text-gray-600 dark:text-gray-400">
-                            Amount: ${booking.totalAmount}
+                            Amount: ৳${booking.totalAmount}
                           </div>
                         </div>
                       </div>

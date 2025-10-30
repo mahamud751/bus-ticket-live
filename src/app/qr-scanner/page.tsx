@@ -963,7 +963,7 @@ export default function QRScannerPage() {
                         {bookingData.schedule.busNumber}
                       </div>
                       <div>
-                        <span className="font-semibold">Total Amount:</span> $
+                        <span className="font-semibold">Total Amount:</span> ৳
                         {bookingData.totalAmount.toFixed(2)}
                       </div>
                     </div>

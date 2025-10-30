@@ -11,6 +11,7 @@
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
     "db:seed:tickets:daily": "tsx scripts/daily-ticket-seed.ts",
+    "db:schedules:auto": "tsx scripts/auto-schedule-creation.ts",
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset"
   },

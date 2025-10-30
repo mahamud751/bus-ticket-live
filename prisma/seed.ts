@@ -284,10 +284,10 @@ async function main() {
 
   console.log("✅ Created routes");
 
-  // Create schedules for the next 7 days with more variety
+  // Create schedules for the next 15 days with more variety
   const schedules = [];
   console.log(
-    `Creating varied schedules for ${routes.length} routes over next 7 days...`
+    `Creating varied schedules for ${routes.length} routes over next 15 days...`
   );
 
   // More realistic departure times with variety
@@ -310,7 +310,7 @@ async function main() {
       (bus) => bus.operatorId === route.operatorId
     );
 
-    for (let day = 0; day < 7; day++) {
+    for (let day = 0; day < 15; day++) {
       const date = new Date();
       date.setDate(date.getDate() + day);
       date.setHours(0, 0, 0, 0);
@@ -377,8 +377,8 @@ async function main() {
         }
 
         const basePrice = Math.floor(
-          (Math.random() * 300 + 200) * basePriceMultiplier
-        ); // 200-500 with multipliers
+          (Math.random() * 1500 + 700) * basePriceMultiplier
+        ); // 700-2200 BDT with multipliers
 
         const schedule = await prisma.schedule.upsert({
           where: {

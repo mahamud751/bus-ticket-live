@@ -479,7 +479,7 @@ export default function AdminSchedules() {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="basePrice">Base Price ($)</Label>
+                      <Label htmlFor="basePrice">Base Price (৳)</Label>
                       <Input
                         id="basePrice"
                         type="number"
@@ -601,7 +601,7 @@ export default function AdminSchedules() {
                     Avg. Price
                   </p>
                   <p className="text-2xl font-bold text-gray-900">
-                    $
+                    ৳
                     {averagePrice.toFixed(0)}
                   </p>
                 </div>
@@ -679,11 +679,11 @@ export default function AdminSchedules() {
 
                         <TableCell>
                           <div className="font-medium">
-                            ${schedule.basePrice}
+                            ৳{schedule.basePrice}
                           </div>
                           {schedule.pricingTiers.length > 1 && (
                             <div className="text-sm text-gray-600">
-                              Premium: $
+                              Premium: ৳
                               {schedule.pricingTiers.find(
                                 (t) => t.seatType === "PREMIUM"
                               )?.price || schedule.basePrice}
@@ -840,7 +840,7 @@ export default function AdminSchedules() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="editBasePrice">Base Price ($)</Label>
+                <Label htmlFor="editBasePrice">Base Price (৳)</Label>
                 <Input
                   id="editBasePrice"
                   type="number"

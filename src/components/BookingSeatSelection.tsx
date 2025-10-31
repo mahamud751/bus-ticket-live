@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import {
   Clock,
   User,
@@ -16,10 +17,13 @@ import {
   Users,
   CreditCard,
   Loader2,
+  LogIn,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
-import { formatDistance } from "@/lib/utils";
+import { formatDistance, formatCurrency } from "@/lib/utils";
 import { useSocket } from "@/hooks/useSocket";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 // Socket event interfaces
 interface SocketEventData {
@@ -74,6 +78,8 @@ export default function BookingSeatSelection({
   sessionId,
   onBookingComplete,
 }: SeatSelectionProps) {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [schedule, setSchedule] = useState<Schedule | null>(null);
   const [seats, setSeats] = useState<Seat[]>([]);
   const [seatMap, setSeatMap] = useState<{ [key: string]: Seat[] }>({});
@@ -85,6 +91,7 @@ export default function BookingSeatSelection({
   const [previousSessionId, setPreviousSessionId] = useState<string | null>(
     null
   );
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   // Socket.io connection
   const { emit, on, off } = useSocket(scheduleId);
@@ -282,6 +289,12 @@ export default function BookingSeatSelection({
   }, [on, off, sessionId, fetchSeatMap]);
 
   const handleSeatClick = async (seatId: string) => {
+    // Check if user is authenticated
+    if (status !== "authenticated") {
+      setShowLoginModal(true);
+      return;
+    }
+
     const seat = seats.find((s) => s.id === seatId);
     console.log("Seat clicked:", seatId, seat); // Debug log
     console.log("Current selected seats:", selectedSeats); // Debug log
@@ -397,6 +410,12 @@ export default function BookingSeatSelection({
 
   // New function to handle individual seat removal from summary
   const handleRemoveSeat = async (seatId: string) => {
+    // Check if user is authenticated
+    if (status !== "authenticated") {
+      setShowLoginModal(true);
+      return;
+    }
+
     console.log("Removing seat from summary:", seatId);
 
     const seat = seats.find((s) => s.id === seatId);
@@ -613,6 +632,12 @@ export default function BookingSeatSelection({
   }, [contactInfo, scheduleId]);
 
   const handleBooking = async () => {
+    // Check if user is authenticated
+    if (status !== "authenticated") {
+      setShowLoginModal(true);
+      return;
+    }
+
     if (selectedSeats.length !== passengers) {
       toast.error(
         `Please select exactly ${passengers} seat${
@@ -698,6 +723,12 @@ export default function BookingSeatSelection({
 
   // New function to clear all seat selections
   const clearSeatSelection = async () => {
+    // Check if user is authenticated
+    if (status !== "authenticated") {
+      setShowLoginModal(true);
+      return;
+    }
+
     if (selectedSeats.length === 0) return;
 
     // Immediately clear selection state
@@ -973,7 +1004,7 @@ export default function BookingSeatSelection({
                           </Badge>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="font-medium">${seat.price}</span>
+                          <span className="font-medium">{formatCurrency(seat.price)}</span>
                           <button
                             onClick={() => handleRemoveSeat(seatId)}
                             className="text-muted-foreground hover:text-red-500 dark:hover:text-red-400"
@@ -991,7 +1022,7 @@ export default function BookingSeatSelection({
                       <div className="flex justify-between items-center text-lg font-bold">
                         <span>Total:</span>
                         <span className="text-blue-600 dark:text-blue-400">
-                          ${totalAmount}
+                          {formatCurrency(totalAmount)}
                         </span>
                       </div>
                     </div>
@@ -1145,12 +1176,49 @@ export default function BookingSeatSelection({
             ) : (
               <>
                 <CreditCard className="h-5 w-5 mr-2" />
-                Proceed to Payment (${totalAmount})
+                Proceed to Payment ({formatCurrency(totalAmount)})
               </>
             )}
           </Button>
         </div>
       </div>
+
+      {/* Login Required Modal */}
+      <Dialog open={showLoginModal} onOpenChange={setShowLoginModal}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <LogIn className="h-5 w-5" />
+              Login Required
+            </DialogTitle>
+            <DialogDescription>
+              Please sign in to select seats and book your journey.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-4 py-4">
+            <p className="text-sm text-muted-foreground">
+              You need to be logged in to select seats and proceed with booking.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-2 justify-end">
+              <Button
+                variant="outline"
+                onClick={() => setShowLoginModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowLoginModal(false);
+                  router.push("/auth/signin");
+                }}
+              >
+                <LogIn className="h-4 w-4 mr-2" />
+                Sign In
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

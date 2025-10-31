@@ -60,10 +60,10 @@ export const useSocket = (scheduleId?: string) => {
     if (!scheduleId) return;
 
     // Initialize socket connection with better configuration
-    // Fixed: Force polling transport to avoid redirect issues
+    // Fixed: Allow both polling and WebSocket transports (Nginx config corrected)
     const socket = io("", {
       path: "/api/socketio",
-      transports: ["polling"], // Force polling only to avoid WebSocket redirect issues
+      transports: ["polling", "websocket"], // Allow both polling and WebSocket transports
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,

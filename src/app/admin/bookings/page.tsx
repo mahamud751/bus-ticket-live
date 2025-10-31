@@ -19,6 +19,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useTicketChat } from "@/hooks/useTicketChat";
+import { formatCurrency } from "@/lib/utils";
 import {
   Calendar,
   Loader2,
@@ -398,7 +399,7 @@ export default function AdminBookingsPage() {
                             {booking.status}
                           </Badge>
                         </TableCell>
-                        <TableCell>৳{booking.totalAmount.toFixed(2)}</TableCell>
+                        <TableCell>{formatCurrency(booking.totalAmount)}</TableCell>
                         <TableCell>
                           <Button
                             onClick={() => openBookingModal(booking)}
@@ -482,7 +483,7 @@ export default function AdminBookingsPage() {
                       >
                         <span>Seat {seat.seat.seatNumber}</span>
                         <span className="font-medium">
-                          ৳{seat.price.toFixed(2)}
+                          {formatCurrency(seat.price)}
                         </span>
                       </div>
                     ))}

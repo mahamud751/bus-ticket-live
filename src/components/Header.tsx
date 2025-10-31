@@ -598,7 +598,7 @@ function MobileBottomNav() {
                 transition={{ duration: 0.1 }}
               >
                 <Icon
-                  className={`h-5 w-5 mb-1 ${
+                  className={`h-6 w-6 ${
                     isActive
                       ? "text-blue-600 dark:text-blue-400"
                       : "text-muted-foreground"
@@ -614,15 +614,6 @@ function MobileBottomNav() {
                     {unreadMessages}
                   </span>
                 )}
-                <span
-                  className={`text-xs font-medium truncate ${
-                    isActive
-                      ? "text-blue-600 dark:text-blue-400"
-                      : "text-muted-foreground"
-                  }`}
-                >
-                  {item.label}
-                </span>
               </motion.button>
             );
           })}
@@ -635,10 +626,7 @@ function MobileBottomNav() {
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.1 }}
         >
-          <User className="h-5 w-5 mb-1" />
-          <span className="text-xs font-medium truncate">
-            {session ? "Sign Out" : "Sign In"}
-          </span>
+          <User className="h-6 w-6" />
         </motion.button>
       </div>
     </motion.nav>

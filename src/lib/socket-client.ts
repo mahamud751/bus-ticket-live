@@ -12,6 +12,7 @@ class SocketManager {
   private userId: string | null = null;
   private isConnecting: boolean = false;
   private isConnectedFlag: boolean = false;
+  private reconnectTimeout: NodeJS.Timeout | null = null;
 
   private constructor() {
     console.log("Creating new SocketManager instance");
@@ -56,8 +57,20 @@ class SocketManager {
       }
 
       console.log("Initializing new socket connection");
-      this.socket = io({
+      // Pass empty string as first parameter and options as second
+      // Fixed: Force polling transport to avoid redirect issues
+      this.socket = io("", {
         path: "/api/socketio",
+        // Allow both polling and WebSocket transports
+        transports: ["polling", "websocket"],
+        // Add reconnection settings
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
+        reconnectionDelayMax: 5000,
+        randomizationFactor: 0.5,
+        // Add timeout settings
+        timeout: 10000,
       });
 
       this.socket.on("connect", () => {
@@ -106,18 +119,29 @@ class SocketManager {
       "max:",
       this.maxRetries
     );
+    
+    // Clear any existing reconnect timeout
+    if (this.reconnectTimeout) {
+      clearTimeout(this.reconnectTimeout);
+      this.reconnectTimeout = null;
+    }
+    
     if (this.connectionAttempts < this.maxRetries) {
       this.connectionAttempts++;
       console.log(
         `Reconnection attempt ${this.connectionAttempts}/${this.maxRetries}`
       );
-      setTimeout(() => {
+      
+      // Use exponential backoff with a maximum delay of 10 seconds
+      const delay = Math.min(1000 * 2 ** this.connectionAttempts, 10000);
+      
+      this.reconnectTimeout = setTimeout(() => {
         if (this.socket) {
           this.socket.connect();
         } else if (this.userId) {
           this.connect(this.userId);
         }
-      }, Math.min(1000 * 2 ** this.connectionAttempts, 10000)); // Exponential backoff
+      }, delay);
     } else {
       console.error("Max reconnection attempts reached");
     }
@@ -206,6 +230,12 @@ class SocketManager {
 
   public disconnect() {
     console.log("Disconnecting socket");
+    // Clear any reconnect timeout
+    if (this.reconnectTimeout) {
+      clearTimeout(this.reconnectTimeout);
+      this.reconnectTimeout = null;
+    }
+    
     if (this.socket) {
       this.socket.disconnect();
       this.socket = null;

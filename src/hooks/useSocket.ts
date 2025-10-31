@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import io from "socket.io-client";
+type Socket = ReturnType<typeof io>;
 
 export interface SocketEvents {
   "seats-being-locked": (data: {
@@ -53,18 +54,22 @@ export interface SocketEvents {
 }
 
 export const useSocket = (scheduleId?: string) => {
-  const socketRef = useRef<ReturnType<typeof io> | null>(null);
+  const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
     if (!scheduleId) return;
 
-    // Initialize socket connection
-    const socket = io(
-      process.env.NODE_ENV === "production" ? "" : "http://localhost:3000",
-      {
-        path: "/api/socketio",
-      }
-    );
+    // Initialize socket connection with better configuration
+    // Fixed: Force polling transport to avoid redirect issues
+    const socket = io("", {
+      path: "/api/socketio",
+      transports: ["polling"], // Force polling only to avoid WebSocket redirect issues
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      timeout: 10000,
+    });
 
     socketRef.current = socket;
 
@@ -73,19 +78,28 @@ export const useSocket = (scheduleId?: string) => {
       socket.emit("join-schedule", scheduleId);
     });
 
-    socket.on("disconnect", () => {
-      console.log("🔌 Disconnected from socket server");
+    socket.on("connect_error", (error: Error) => {
+      console.error("🔌 Socket connection error:", error);
+    });
+
+    socket.on("disconnect", (reason: string) => {
+      console.log("🔌 Disconnected from socket server:", reason);
     });
 
     return () => {
-      socket.emit("leave-schedule", scheduleId);
-      socket.disconnect();
+      if (socketRef.current) {
+        socketRef.current.emit("leave-schedule", scheduleId);
+        socketRef.current.disconnect();
+        socketRef.current = null;
+      }
     };
   }, [scheduleId]);
 
   const emit = (event: string, data: unknown) => {
-    if (socketRef.current) {
+    if (socketRef.current && socketRef.current.connected) {
       socketRef.current.emit(event, data);
+    } else {
+      console.warn("Socket not connected, cannot emit event:", event);
     }
   };
 
@@ -95,7 +109,7 @@ export const useSocket = (scheduleId?: string) => {
     }
   };
 
-  const off = (event: string, callback?: () => void) => {
+  const off = (event: string, callback?: (...args: unknown[]) => void) => {
     if (socketRef.current) {
       socketRef.current.off(event, callback);
     }
